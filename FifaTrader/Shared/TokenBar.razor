@@ -1,0 +1,12 @@
+﻿<div class="token-bar">
+    <h3 class="token-text">X-UT-SID</h3>
+    <input type="text" @onchange="SaveOnChange"/>
+</div>
+
+@code {
+
+    public void SaveOnChange(ChangeEventArgs e)
+    {
+        ProtectedSessionStore.SetAsync("accessToken", e.Value.ToString());
+    }
+}

@@ -1,0 +1,72 @@
+﻿@page "/transfers"
+@using FifaTrader.Models;
+@using FifaTrader.Pages.Components;
+
+<div class="content-body">
+    <h2>Transfer List</h2>
+    <p>Use this page to manage the players you are selling</p>
+    <div class="input-outer">
+        <div class="input-number">
+            <p>Input the starting price of players you want to sell</p>
+            <input type="number" @bind="startPrice" />
+        </div>
+        <div class="input-number">
+            <p>Input the BIN price of player you want to sell</p>
+            <input type="number" @bind="binPrice" />
+        </div>
+    </div>
+    <div class="button--layer">
+        <button class="btn btn-primary" @onclick="SellPlayers">Sell Non-listed Players</button>
+        <button class="btn btn-primary" @onclick="SellPlayers">Refresh Players</button>
+    </div>
+
+    <div class="targets-view">
+        <TargetsCount Bids=@bids />
+        <BidView Bids=@bids FullScreen="Partial" />
+    </div>
+
+</div>
+
+@code {
+    public int startPrice { get; set; }
+    public int binPrice { get; set; }
+    public List<BidViewModel> bids = new List<BidViewModel>();
+
+    private void SellPlayers()
+    {
+        bids = CreateNewBidList();
+    }
+
+    private List<BidViewModel> CreateNewBidList()
+    {
+        var bidList = new List<BidViewModel>();
+        for (var i = 0; i < 22; i++)
+        {
+            if (i % 2 == 0)
+            {
+                bidList.Add(new BidViewModel
+                {
+                    Status = "Outbid",
+                    BidPrice = 1400,
+                    TradeId = 12345,
+                    TimeRemaining = 123,
+                    Pending = false
+                });
+            }
+            else
+            {
+                bidList.Add(new BidViewModel
+                {
+                    Status = "Success",
+                    BidPrice = 1400,
+                    TradeId = 12345,
+                    TimeRemaining = 123,
+                    Pending = true
+                });
+            }
+
+        }
+
+        return bidList;
+    }
+}

@@ -1,0 +1,12 @@
+﻿@using FifaTrader.Models
+<div class="targets-count">
+    <h3 class="component-title">Targets Summary</h3>
+    <p>Number of items in targets: <b>@Bids.Count</b></p>
+    <p>Number of items won: <b>@Bids.Count(x => x.Status == "Success" && x.Pending == false)</b></p>
+    <p>Number of items not won: <b>@Bids.Count(x => x.Status == "Fail" || x.Status == "Outbid")</b></p>
+</div>
+
+@code {
+    [Parameter]
+    public List<BidViewModel> Bids { get; set; }
+}

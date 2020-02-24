@@ -1,0 +1,50 @@
+﻿@page "/massbid"
+@using FifaTrader.Models;
+@using FifaTrader.Pages.Components;
+
+<div class="content-body">
+    <h2>Mass Bidder</h2>
+    <p>Use this page to mass bid on a player</p>
+    <div class="input-outer">
+        <div class="input-number">
+            <p>Input the price you want to bid</p>
+            <input type="number" @bind="bidPrice" />
+        </div>
+        <div class="input-number">
+            <p>Input the ID of the player you are bidding on</p>
+            <input type="number" @bind="playerId" />
+        </div>
+    </div>
+    <button class="btn btn-primary" @onclick="BidOnPlayers">Bid</button>
+    <BidView Bids=@bids />
+</div>
+
+@code {
+    public int playerId { get; set; }
+    public int bidPrice { get; set; }
+    public string token { get; set; }
+
+    public List<BidViewModel> bids = new List<BidViewModel>();
+
+    private async Task BidOnPlayers()
+    {
+        token = await ProtectedSessionStore.GetAsync<string>("accessToken");
+        bids = await ApiGateway.FetchPlayers(playerId, bidPrice, token);
+    }
+
+    //private List<BidViewModel> CreateNewBidList()
+    //{
+    //    var bidList = new List<BidViewModel>();
+    //    for (var i = 0; i < 22; i++)
+    //    {
+    //        bidList.Add(new BidViewModel
+    //        {
+    //            Status = "Pending",
+    //            BidPrice = bidPrice,
+    //            TradeId = playerId
+    //        });
+    //    }
+
+    //    return bidList;
+    //}
+}

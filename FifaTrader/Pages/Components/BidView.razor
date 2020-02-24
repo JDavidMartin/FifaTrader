@@ -1,0 +1,41 @@
+﻿@using FifaTrader.Models;
+
+<div class="bidView-outer @FullScreen">
+    <div class="table table-centre">
+        <table class="fullWidth">
+            <tr>
+                <th>Bid Number</th>
+                <th>Player Id</th>
+                <th>Bid Status</th>
+                <th>Bid Price</th>
+                <th>Time Remaining</th>
+            </tr>
+            @for (var i = 0; i < Bids.Count; i++)
+            {
+                <tr>
+                    <th>@(@i + 1)</th>
+                    <th>@Bids[i].TradeId</th>
+                    @if (Bids[i].Pending)
+                    {
+                        <th class="@Bids[i].Status">@Bids[i].Status <span class="spinner-border spinner-small"></span></th>
+                    }
+                    else
+                    {
+                        <th class="@Bids[i].Status">@Bids[i].Status <span class="spinner-solid spinner-small"></span></th>
+                    }
+                    <th>@Bids[i].BidPrice</th>
+                    <th>@Bids[i].TimeRemaining</th>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+@code{
+
+    [Parameter]
+    public List<BidViewModel> Bids { get; set; }
+
+    [Parameter]
+    public string FullScreen { get; set; }
+}
