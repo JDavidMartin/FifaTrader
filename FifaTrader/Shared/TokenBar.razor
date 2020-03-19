@@ -1,12 +1,24 @@
 ﻿<div class="token-bar">
     <h3 class="token-text">X-UT-SID</h3>
-    <input type="text" @onchange="SaveOnChange"/>
+    <input type="text" @onchange="SaveOnChange" />
+    <div class="Validation-Box">
+        <button class="btn WhiteText" @onclick="ValidateToken">Validate Token</button>
+        <div class="Validate @tokenValid"></div>
+    </div>
 </div>
 
 @code {
+    private string tokenValid { get; set; }
+    private string token { get; set; }
+
+    private async Task ValidateToken()
+    {
+        tokenValid = await ApiGateway.CheckToken(token);
+    }
 
     public void SaveOnChange(ChangeEventArgs e)
     {
         ProtectedSessionStore.SetAsync("accessToken", e.Value.ToString());
+        token = e.Value.ToString();
     }
 }

@@ -22,11 +22,24 @@ namespace FifaTrader.Models.ModelBuilders
             return searchModels.Select(x => new BidViewModel
             {
                 Status = "Pending",
-                BidPrice = x.CurrentPrice,
                 Pending = true,
                 TimeRemaining = x.TimeRemaining,
                 TradeId = x.TradeId
             }).ToList();
+        }
+
+        public List<BidViewModel> PopulateDefaultFieldsOfBidViews(List<BidViewModel> players)
+        {
+
+            foreach(var player in players)
+            {
+                if (player.TimeRemaining == -1)
+                {
+                    player.Pending = false;
+                }
+            }
+
+            return players;
         }
     }
 }

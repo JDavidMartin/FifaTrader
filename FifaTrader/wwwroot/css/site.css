@@ -185,7 +185,7 @@ app {
 
 .token-bar {
     background-color: #3a0647;
-    height: 5vh;
+    height: 7vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -247,6 +247,18 @@ tr:nth-child(even) {
     color: #02611b;
 }
 
+.Selling {
+    color: #02611b;
+}
+
+.highest {
+    color: #02611b;
+}
+
+.outbid {
+    color: #c41414;
+}
+
 .Fail {
     color: #c41414;
 }
@@ -257,10 +269,6 @@ tr:nth-child(even) {
 
 .Pending {
     color: grey;
-}
-
-.Outbid {
-    color: #eba50e;
 }
 
 .spinner-small {
@@ -280,7 +288,7 @@ tr:nth-child(even) {
 }
 
 .targets-count {
-    width: 25%;
+    width: 90%;
     margin-left: 5%;
     background-color: #f2f2f2;
     height: 100%;
@@ -293,4 +301,31 @@ tr:nth-child(even) {
 
 .component-title {
     text-decoration: underline;
+}
+
+.Validation-Box {
+    margin-left: 5px;
+    background-color: #1b6ec2;
+    display: flex;
+    border-radius: 10rem;
+}
+
+.Validate {
+    height: 15px;
+    width: 15px;
+    background-color: #02611b;
+    border-radius: 50%;
+    background-color: grey
+}
+
+.Valid {
+    background-color: #02611b;
+}
+
+.Invalid {
+    background-color: #c41414;
+}
+
+.WhiteText {
+    color: #fff;
 }

@@ -15,7 +15,16 @@
             <input type="number" @bind="playerId" />
         </div>
     </div>
+    <p>Kampl - 195365</p>
+    <p>Illaramendi - 190584</p>
+    <p>Tadic - 199434</p>
     <button class="btn btn-primary" @onclick="BidOnPlayers">Bid</button>
+    <div>
+        <input type="radio" value=true id="Allow" @onchange="RadioSelection" checked=@RadioValue />
+        <label for="Allow">Allow API Calls</label>
+        <input type="radio" value=false id="Block" @onchange="RadioSelection" checked=@(!RadioValue) />
+        <label for="Block">Block API Calls</label>
+    </div>
     <BidView Bids=@bids />
 </div>
 
@@ -23,6 +32,7 @@
     public int playerId { get; set; }
     public int bidPrice { get; set; }
     public string token { get; set; }
+    private bool RadioValue { get; set; } = true;
 
     public List<BidViewModel> bids = new List<BidViewModel>();
 
@@ -30,21 +40,39 @@
     {
         token = await ProtectedSessionStore.GetAsync<string>("accessToken");
         bids = await ApiGateway.FetchPlayers(playerId, bidPrice, token);
+
+        for (var i = 0; i < bids.Count; i++)
+        {
+            if (RadioValue)
+            {
+                bids[i].Status = await ApiGateway.BidOnPlayer(bids[i].TradeId, bidPrice, token);
+
+                bids[i].BidPrice = bidPrice;
+                this.StateHasChanged();
+                if (bids[i].Status != "Success")
+                {
+                    ErrorAllBids(i);
+                    break;
+                }
+                await Task.Delay(1000);
+            }
+        }
     }
 
-    //private List<BidViewModel> CreateNewBidList()
-    //{
-    //    var bidList = new List<BidViewModel>();
-    //    for (var i = 0; i < 22; i++)
-    //    {
-    //        bidList.Add(new BidViewModel
-    //        {
-    //            Status = "Pending",
-    //            BidPrice = bidPrice,
-    //            TradeId = playerId
-    //        });
-    //    }
 
-    //    return bidList;
-    //}
+    private void ErrorAllBids(int index)
+    {
+        for (var i = index; i < bids.Count; i++)
+        {
+            bids[i].Status = "Error";
+            bids[i].Pending = false;
+            bids[i].TimeRemaining = 0;
+        }
+    }
+
+    void RadioSelection(ChangeEventArgs args)
+    {
+        RadioValue = args.Value.ToString() == "true";
+        this.StateHasChanged();
+    }
 }

@@ -6,6 +6,6 @@ namespace FifaTrader.Models
     public class auctionSearchModel
     {
         [JsonPropertyName("auctionInfo")]
-        public List<PlayerSearchModel> AuctionInfo { get; set; }
+        public List<BidViewModel> AuctionInfo { get; set; }
     }
 }

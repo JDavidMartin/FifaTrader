@@ -24,9 +24,8 @@ namespace FifaTraderUnitTests.ModelBuilderTests
             {
                 new PlayerSearchModel
                 {
-                    CurrentPrice=1400,
                     TimeRemaining=123,
-                    TradeId=12345
+                    TradeId="12345"
                 }
             };
 
@@ -34,9 +33,8 @@ namespace FifaTraderUnitTests.ModelBuilderTests
             {
                 new BidViewModel
                 {
-                    BidPrice=1400,
                     TimeRemaining=123,
-                    TradeId=12345,
+                    TradeId="12345",
                     Pending=true,
                     Status="Pending"
                 }
@@ -67,6 +65,48 @@ namespace FifaTraderUnitTests.ModelBuilderTests
             var actual = _bidViewModelBuilder.ConvertSearchModelToBidView(initial);
 
             // Assert
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void PopulateDefaultFieldsTakesListOfBidViewAndReturnsCorrectModel()
+        {
+            //Arrange
+            var initial = new List<BidViewModel>
+            {
+                new BidViewModel
+                {
+                    TimeRemaining=-1,
+                    Status = "Outbid",
+                    Pending = true
+                },
+                new BidViewModel
+                {
+                    TimeRemaining=10,
+                    Status="Winning",
+                    Pending = true
+                }
+            };
+            var expected = new List<BidViewModel>
+            {
+                new BidViewModel
+                {
+                    TimeRemaining=-1,
+                    Status = "Outbid",
+                    Pending = false
+                },
+                new BidViewModel
+                {
+                    TimeRemaining=10,
+                    Status="Winning",
+                    Pending = true
+                }
+            };
+
+            //Act
+            var actual = _bidViewModelBuilder.PopulateDefaultFieldsOfBidViews(initial);
+
+            //Assert
             actual.Should().BeEquivalentTo(expected);
         }
     }

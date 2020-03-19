@@ -8,5 +8,7 @@ namespace FifaTrader.Models.ModelBuilders
     public interface IBidViewModelBuilder
     {
         List<BidViewModel> ConvertSearchModelToBidView(List<PlayerSearchModel> searchModels);
+
+        List<BidViewModel> PopulateDefaultFieldsOfBidViews(List<BidViewModel> bidViews);
     }
 }

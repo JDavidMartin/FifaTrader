@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,6 +9,10 @@ using FifaTrader.APIHandler.Interfaces;
 using FifaTrader.APIHandler;
 using FifaTrader.APIHandler.HttpHandlers.GetRequests;
 using FifaTrader.APIHandler.HttpHandlers.UrlBuilder;
+using FifaTrader.APIHandler.HttpHandlers.PutRequests;
+using FifaTrader.APIHandler.HttpHandlers;
+using FifaTrader.APIHandler.HttpHandlers.PostRequests;
+using FifaTrader.APIHandler.HttpHandlers.DeleteRequests;
 
 namespace FifaTrader
 {
@@ -40,6 +38,15 @@ namespace FifaTrader
             services.AddTransient<IGetRequestHandler, GetRequestHandler>();
             services.AddTransient<IGetRequestMaker, GetRequestMaker>();
             services.AddTransient<IUrlBuilder, UrlBuilder>();
+            services.AddTransient<IPutRequestHandler, PutRequestHandler>();
+            services.AddTransient<IPutRequestMaker, PutRequestMaker>();
+            services.AddTransient<IStatusCodeHandler, StatusCodeHandler>();
+            services.AddTransient<IHttpWrapper, HttpWrapper>();
+            services.AddTransient<IPostRequestHandler, PostRequestHandler>();
+            services.AddTransient<IPostRequestMaker, PostRequestMaker>();
+            services.AddTransient<IDeleteHandler, DeleteHandler>();
+            services.AddTransient<IDeleteMaker, DeleteMaker>();
+            services.AddTransient<ITradeIdsBuilder, TradeIdsBuilder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

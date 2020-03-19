@@ -1,4 +1,5 @@
 ﻿@using FifaTrader.Models;
+@using System.Threading;
 
 <div class="bidView-outer @FullScreen">
     <div class="table table-centre">
@@ -38,4 +39,35 @@
 
     [Parameter]
     public string FullScreen { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var timer = new Timer(new TimerCallback(_ =>
+        {
+            if (Bids.Count != 0)
+            {
+
+                if (Bids.Max(x => x.TimeRemaining) != -1)
+                {
+
+                    UpdateTimes();
+                    InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+                }
+            }
+        }), null, 1000, 2000);
+    }
+
+    void UpdateTimes()
+    {
+        foreach (var player in Bids)
+        {
+            if (player.TimeRemaining > -1)
+            {
+                player.TimeRemaining -= 2;
+            }
+        }
+    }
 }

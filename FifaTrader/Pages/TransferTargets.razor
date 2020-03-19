@@ -1,6 +1,7 @@
 ﻿@page "/Targets"
 @using FifaTrader.Models;
 @using FifaTrader.Pages.Components;
+@using System.Threading;
 
 <div class="content-body">
     <h2>Transfer Targets</h2>
@@ -17,58 +18,85 @@
     </div>
     <div class="button--layer">
         <button class="btn btn-primary" @onclick="SellPlayers">Sell Players</button>
-        <button class="btn btn-primary" @onclick="SellPlayers">Clear Expired Players</button>
-        <button class="btn btn-primary" @onclick="SellPlayers">Refresh Players</button>
+        <button class="btn btn-primary" @onclick="RefreshPlayers">Refresh Players</button>
+        <button class="btn btn-primary" @onclick="ClearExpiredPlayers">Clear Expired Players</button>
     </div>
-
-    <div class="targets-view">
-        <TargetsCount Bids=@bids />
-        <BidView Bids=@bids FullScreen="Partial" />
+    <TargetsCount Bids=@players />
+    <div>
+        <input type="radio" value=true id="Allow" @onchange="RadioSelection" checked=@RadioValue />
+        <label for="Allow">Allow API Calls</label>
+        <input type="radio" value=false id="Block" @onchange="RadioSelection" checked=@(!RadioValue) />
+        <label for="Block">Block API Calls</label>
     </div>
-
+    <BidView Bids=@players />
 </div>
+
 @code {
-    public int startPrice;
-    public int binPrice;
+    public int startPrice { get; set; }
+    public int binPrice { get; set; }
+    public string token { get; set; }
+    private bool RadioValue { get; set; } = true;
 
-    public List<BidViewModel> bids = new List<BidViewModel>();
+    public List<BidViewModel> players = new List<BidViewModel>();
 
-
-    private void SellPlayers()
+    private async Task SellPlayers()
     {
-        bids = CreateNewBidList();
-    }
+        token = await ProtectedSessionStore.GetAsync<string>("accessToken");
 
-    private List<BidViewModel> CreateNewBidList()
-    {
-        var bidList = new List<BidViewModel>();
-        for (var i = 0; i < 22; i++)
+        foreach (var player in players)
         {
-            if (i % 2 == 0)
+            if (RadioValue)
             {
-                bidList.Add(new BidViewModel
-                {
-                    Status = "Outbid",
-                    BidPrice = 1400,
-                    TradeId = 12345,
-                    TimeRemaining = 123,
-                    Pending = false
-                });
-            }
-            else
-            {
-                bidList.Add(new BidViewModel
-                {
-                    Status = "Success",
-                    BidPrice = 1400,
-                    TradeId = 12345,
-                    TimeRemaining = 123,
-                    Pending = true
-                });
+                player.Status = await ApiGateway.SellPlayer(player.TradeId, player.ItemData.playerId, token, startPrice, binPrice);
+                this.StateHasChanged();
+                await Task.Delay(1000);
             }
 
         }
+    }
 
-        return bidList;
+    private async Task ClearExpiredPlayers()
+    {
+        var token = await ProtectedSessionStore.GetAsync<string>("accessToken");
+        await ApiGateway.ClearExpiredPlayers(token, players);
+        await RefreshPlayers();
+
+    }
+
+    private async Task RefreshPlayers()
+    {
+        await UpdateTransferTargets();
+        this.StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        var timer = new Timer(new TimerCallback(async _ =>
+        {
+            if (players.Count != 0)
+            {
+                if (players.Max(x => x.TimeRemaining != -1))
+                {
+                    await UpdateTransferTargets();
+                    await InvokeAsync(() =>
+                    {
+                        StateHasChanged();
+                    });
+                }
+            }
+        }), null, 1000, 10000);
+    }
+
+    protected async Task UpdateTransferTargets()
+    {
+        token = await ProtectedSessionStore.GetAsync<string>("accessToken");
+
+        players = await ApiGateway.GetTransferTargets(token);
+    }
+
+    void RadioSelection(ChangeEventArgs args)
+    {
+        RadioValue = args.Value.ToString() == "true";
+        this.StateHasChanged();
     }
 }

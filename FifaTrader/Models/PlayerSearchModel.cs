@@ -1,16 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace FifaTrader.Models
 {
     public class PlayerSearchModel
     {
-        [JsonPropertyName("tradeId")]
-        public int TradeId { get; set; }
+        [JsonProperty("tradeId")]
+        public string TradeId { get; set; }
 
-        [JsonPropertyName("expires")]
+        [JsonProperty("expires")]
         public int TimeRemaining { get; set; }
-
-        [JsonPropertyName("price")]
-        public int CurrentPrice { get; set; }
     }
 }
