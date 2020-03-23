@@ -24,7 +24,7 @@ If your token is invalid or expired, a red circle will appear instead.
 And that's you set up to go!
 Eventually your token will expire, when this happens simply repeat the above steps again.
 
-## Buying Players##
+## Buying Players ##
 On the nav bar on the left hand side, click on the Buy Players tab.
 
 There will be 2 form boxes on this page. One for the price you want to bid, another for the player Id.
@@ -42,7 +42,7 @@ If the bid is successful, the status will turn green.
 If the bid unsuccessful, the status will turn red, and all future bids will fail.
 This is done to prevent calls being made when you have a temporary market ban, and make things worse by continuing to try and bid.
 
-## Managing Players##
+## Managing Players ##
 On the nav var on the left hand side, click on the Transfer Targets tab.
 
 Click on the "Refresh Players" button.
