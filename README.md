@@ -49,11 +49,18 @@ Click on the "Refresh Players" button.
 
 This will update the view with a summary of all players in your Transfer Targets.
 Won players have a solid green status circle.
-Winning players have a green spinner status
-Lost players have a solid red status circle
+Winning players have a green spinner status.
+Lost players have a solid red status circle.
 Losing players have a red spinner status.
 
 "Clear Expired" players will remove all Lost or Losing players
 
 "Sell Players" will sell all players at the price set in the two forms at the top of the page.
 One form is Starting Bid, the other is Buy Now Price
+
+## Future Plans ##
+Adding in Transfer List functionality, to manage players currently selling.
+
+Adding in Unassigned functionality, to allow users to move players to unsassigned, and then move to transfer list.
+
+Create a method to store favourited player ID's, to be easily accessed on the Bidding page.
