@@ -4,9 +4,9 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
 {
     public class UrlBuilder : IUrlBuilder
     {
-        private string searchBase = "https://utas.external.s2.fut.ea.com/ut/game/fifa20/transfermarket?type=player";
-        private string bidBase = "https://utas.external.s2.fut.ea.com/ut/game/fifa20/trade/";
-        private string watchListBase = "https://utas.external.s2.fut.ea.com/ut/game/fifa20/watchlist";
+        private string searchBase = "https://utas.external.s2.fut.ea.com/ut/game/fifa22/transfermarket?type=player";
+        private string bidBase = "https://utas.external.s2.fut.ea.com/ut/game/fifa22/trade/";
+        private string watchListBase = "https://utas.external.s2.fut.ea.com/ut/game/fifa22/watchlist";
 
         public string BuildBidUrl(string tradeId)
         {
@@ -37,17 +37,17 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
 
         public string GetAuctionUrl()
         {
-            return "https://utas.external.s2.fut.ea.com/ut/game/fifa20/auctionhouse";
+            return "https://utas.external.s2.fut.ea.com/ut/game/fifa22/auctionhouse";
         }
 
         public string GetCheckTokenUrl()
         {
-            return "https://utas.external.s2.fut.ea.com/ut/game/fifa20/user/credits";
+            return "https://utas.external.s2.fut.ea.com/ut/game/fifa22/user/credits";
         }
 
         public string GetItemUrl()
         {
-            return "https://utas.external.s2.fut.ea.com/ut/game/fifa20/item";
+            return "https://utas.external.s2.fut.ea.com/ut/game/fifa22/item";
         }
 
         public string GetTransferTargetsUrl()

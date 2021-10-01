@@ -25,7 +25,7 @@ namespace FifaTraderUnitTests.GatewayTests
 			// Arrange
 			var bidPrice = 1400;
 			var playedId = 1234;
-			var expected = "https://utas.external.s2.fut.ea.com/ut/game/fifa20/transfermarket?type=player&maskedDefId=1234&macr=1300&num=21&start=0";
+			var expected = "https://utas.external.s2.fut.ea.com/ut/game/fifa22/transfermarket?type=player&maskedDefId=1234&macr=1300&num=21&start=0";
 
 			// Act
 			var actual = _urlBuilder.BuildSearchUrl(playedId, bidPrice);
@@ -40,7 +40,7 @@ namespace FifaTraderUnitTests.GatewayTests
 			// Arrange
 			var bidPrice = 900;
 			var playedId = 1234;
-			var expected = "https://utas.external.s2.fut.ea.com/ut/game/fifa20/transfermarket?type=player&maskedDefId=1234&macr=850&num=21&start=0";
+			var expected = "https://utas.external.s2.fut.ea.com/ut/game/fifa22/transfermarket?type=player&maskedDefId=1234&macr=850&num=21&start=0";
 
 			// Act
 			var actual = _urlBuilder.BuildSearchUrl(playedId, bidPrice);
@@ -54,7 +54,7 @@ namespace FifaTraderUnitTests.GatewayTests
 		{
 			//Arrange
 			var tradeId = "12345";
-			var expected = "https://utas.external.s2.fut.ea.com/ut/game/fifa20/trade/12345/bid";
+			var expected = "https://utas.external.s2.fut.ea.com/ut/game/fifa22/trade/12345/bid";
 
 			//Act
 			var actual = _urlBuilder.BuildBidUrl(tradeId);
@@ -68,7 +68,7 @@ namespace FifaTraderUnitTests.GatewayTests
 		{
 			//Arrange
 			var tradeIds = "12345,54321";
-			var expected = "https://utas.external.s2.fut.ea.com/ut/game/fifa20/watchlist?tradeId=12345,54321";
+			var expected = "https://utas.external.s2.fut.ea.com/ut/game/fifa22/watchlist?tradeId=12345,54321";
 
 			//Act
 			var actual = _urlBuilder.BuildDeletePlayerUrl(tradeIds);
