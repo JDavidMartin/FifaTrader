@@ -12,11 +12,18 @@
         </div>
         <div class="input-number">
             <p>Select the league you want to buy from</p>
-            <input type="number" @bind="playerId" />
+            <select name="leagueId" @onchange="LeagueSelection">
+                <option value="0">Select a League</option>
+                <option value="16">Ligue 1</option>
+            </select>
         </div>
         <div class="input-number">
             <p>Select either rare or common</p>
-            <input type="number" @bind="playerId" />
+            <select name="rarityId" @onchange="RaritySelection">
+                <option value="0">Select a rarity</option>
+                <option value="1">Rare</option>
+                <option value="2">Common</option>
+            </select>
         </div>
     </div>
 
@@ -43,7 +50,7 @@
     private async Task BidOnPlayers()
     {
         token = await ProtectedSessionStore.GetAsync<string>("accessToken");
-        bids = await ApiGateway.FetchPlayers(playerId, bidPrice, token);
+        bids = await ApiGateway.FetchPlayersByLeague(leagueId, rarityId, bidPrice, token);
 
         for (var i = 0; i < bids.Count; i++)
         {
@@ -88,6 +95,18 @@
     void CheckBoxSelection()
     {
         ExtendPlayerInfo = !ExtendPlayerInfo;
+        this.StateHasChanged();
+    }
+
+    void LeagueSelection(ChangeEventArgs args)
+    {
+        leagueId = int.Parse(args.Value.ToString());
+        this.StateHasChanged();
+    }
+
+    void RaritySelection(ChangeEventArgs args)
+    {
+        rarityId = int.Parse(args.Value.ToString());
         this.StateHasChanged();
     }
 }

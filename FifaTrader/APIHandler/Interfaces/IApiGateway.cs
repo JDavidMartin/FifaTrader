@@ -8,6 +8,8 @@ namespace FifaTrader.APIHandler.Interfaces
     {
         Task<List<BidViewModel>> FetchPlayers(int playerId, int bidPrice, string accessToken);
 
+        Task<List<BidViewModel>> FetchPlayersByLeague(int leagueId, int rarityId, int bidPrice, string accessToken);
+
         Task<string> BidOnPlayer(string tradeId, int bidPrice, string accessToken);
 
         Task<List<BidViewModel>> GetTransferTargets(string accessToken);

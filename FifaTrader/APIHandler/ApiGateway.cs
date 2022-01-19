@@ -61,6 +61,23 @@ namespace FifaTrader.APIHandler
             return searchList.Count == 0 ? defaultValue: searchList;
         }
 
+        public async Task<List<BidViewModel>> FetchPlayersByLeague(int leagueId, int rarityId, int bidPrice, string accessToken)
+        {
+            var searchList = await _getRequestHandler.SearchForLeagueRarityPlayers(leagueId, rarityId, bidPrice, accessToken);
+            var defaultValue = new List<BidViewModel> {
+                new BidViewModel
+                {
+                    Status = "expired",
+                    TimeRemaining = -1,
+                    BidPrice = 0,
+                    Pending = false,
+                    TradeId = "No Players Found"
+                }
+            };
+
+            return searchList.Count == 0 ? defaultValue : searchList;
+        }
+
         public async Task<List<BidViewModel>> GetTransferTargets(string accessToken)
         {
             try

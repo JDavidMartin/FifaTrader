@@ -21,6 +21,20 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
             return watchListBase + query;
         }
 
+        public string BuildSearchForLeagueRarityUrl(int leagueId, int rarityId, int bidPrice)
+        {
+            string parameterQuery;
+            if (bidPrice <= 1000)
+            {
+                parameterQuery = $"&leag={leagueId}&rarityIds={rarityId}&lev=gold&macr={bidPrice - 50}&num=21&start=0";
+            }
+            else
+            {
+                parameterQuery = $"&leag={leagueId}&rarityIds={rarityId}&lev=gold&macr={bidPrice - 100}&num=21&start=0";
+            }
+            return searchBase + parameterQuery;
+        }
+
         public string BuildSearchUrl(int playerId, int bidPrice)
         {
             string parameterQuery;

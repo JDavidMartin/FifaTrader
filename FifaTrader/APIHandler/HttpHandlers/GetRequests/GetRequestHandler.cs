@@ -50,6 +50,24 @@ namespace FifaTrader.APIHandler.HttpHandlers.GetRequests
             }
         }
 
+        public async Task<List<BidViewModel>> SearchForLeagueRarityPlayers(int leagueId, int rarityId, int bidPrice, string accessToken)
+        {
+            var url = _urlBuilder.BuildSearchForLeagueRarityUrl(leagueId, rarityId, bidPrice);
+
+            try
+            {
+                var response = await _getRequestMaker.MakeGetRequest(url, accessToken);
+                var auctionInfo = JsonConvert.DeserializeObject<auctionSearchModel>(response);
+
+                return auctionInfo.AuctionInfo;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<BidViewModel>();
+            }
+        }
+
         public async Task<List<BidViewModel>> SearchForSpecificPlayer(int playerId, int bidPrice, string accessToken)
         {
             var url = _urlBuilder.BuildSearchUrl(playerId, bidPrice);
