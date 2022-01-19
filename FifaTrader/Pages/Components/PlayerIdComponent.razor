@@ -1,0 +1,70 @@
+﻿@using FifaTrader.Models;
+@using FifaTrader.Models.ModelBuilders;
+@using System.Threading;
+
+<div class="bidView-outer">
+    @if (Extend)
+    {
+        <div class="table table-centre">
+            <table>
+                <tr>
+                    <th>Player Name</th>
+                    <th>Player Id</th>
+                    <th>Delete</th>
+                </tr>
+                @{ int i = 0;}
+                @foreach (var playerId in Players)
+                {
+                    int index = i;
+                    <tr>
+                        <th>@playerId.PlayerName</th>
+                        <th @onclick="() => ParentOnClickFunction.InvokeAsync(playerId.PlayerId)">
+                            @playerId.PlayerId
+                        </th>
+                        <th @onclick="() => RemovePlayerFromStore(index)">Delete @index</th>
+                    </tr>
+                    { i++; }
+                }
+            </table>
+        </div>
+        <div class="input-outer">
+            <div class="input-number">
+                <p>Input the name of a player to add to the local store</p>
+                <input type="search" @bind="PlayerName" />
+            </div>
+            <div class="input-number">
+                <p>Input the ID of the player to add to the local store</p>
+                <input type="number" @bind="PlayerId" />
+            </div>
+            <button class="btn btn-primary" @onclick="AddPlayerToStore">Insert</button>
+        </div>
+    }
+</div>
+
+@code{
+    [Parameter]
+    public EventCallback<int> ParentOnClickFunction { get; set; }
+
+    [Parameter]
+    public bool Extend { get; set; } = true;
+
+    public string PlayerName { get; set; }
+    public int PlayerId { get; set; }
+    public List<PlayerIdModel> Players { get; set; } = new List<PlayerIdModel>();
+
+    protected override void OnInitialized()
+    {
+        Players = _playerIdModelBuilder.ReadStoredPlayers();
+    }
+
+    private void AddPlayerToStore()
+    {
+        Players = _playerIdModelBuilder.AddPlayerIdToStore(PlayerName, PlayerId);
+    }
+
+    private void RemovePlayerFromStore(int index)
+    {
+        Players = _playerIdModelBuilder.RemovePlayerFromStore(index);
+        this.StateHasChanged();
+    }
+}

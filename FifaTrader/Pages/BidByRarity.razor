@@ -1,26 +1,25 @@
-﻿@page "/massbid"
+﻿@page "/massbidbyrarity"
 @using FifaTrader.Models;
 @using FifaTrader.Pages.Components;
 
 <div class="content-body">
     <h2>Mass Bidder</h2>
-    <p>Use this page to mass bid on a player</p>
+    <p>Use this page to mass bid on rare or common players</p>
     <div class="input-outer">
         <div class="input-number">
             <p>Input the price you want to bid</p>
             <input type="number" step="50" @bind="bidPrice" />
         </div>
         <div class="input-number">
-            <p>Input the ID of the player you are bidding on</p>
+            <p>Select the league you want to buy from</p>
+            <input type="number" @bind="playerId" />
+        </div>
+        <div class="input-number">
+            <p>Select either rare or common</p>
             <input type="number" @bind="playerId" />
         </div>
     </div>
 
-    <div>
-        <input type="checkbox" value="false" id="Extend" @onchange="CheckBoxSelection" checked="@ExtendPlayerInfo" />
-        <label for="Extend">Show Player Id's?</label>
-        <PlayerIdComponent Extend=@ExtendPlayerInfo ParentOnClickFunction="SetPlayerIdValue" />
-    </div>
     <button class="btn btn-primary" @onclick="BidOnPlayers">Bid</button>
     <div>
         <input type="radio" value=true id="Allow" @onchange="RadioSelection" checked=@RadioValue />
@@ -32,7 +31,8 @@
 </div>
 
 @code {
-    public int playerId { get; set; }
+    public int leagueId { get; set; }
+    public int rarityId { get; set; }
     public int bidPrice { get; set; }
     public string token { get; set; }
     private bool RadioValue { get; set; } = true;
@@ -89,10 +89,5 @@
     {
         ExtendPlayerInfo = !ExtendPlayerInfo;
         this.StateHasChanged();
-    }
-
-    void SetPlayerIdValue(int selectedPlayerId)
-    {
-        playerId = selectedPlayerId;
     }
 }

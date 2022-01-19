@@ -47,6 +47,7 @@ namespace FifaTrader
             services.AddTransient<IDeleteHandler, DeleteHandler>();
             services.AddTransient<IDeleteMaker, DeleteMaker>();
             services.AddTransient<ITradeIdsBuilder, TradeIdsBuilder>();
+            services.AddTransient<IPlayerIdModelBuilder, PlayerIdModelBuilder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

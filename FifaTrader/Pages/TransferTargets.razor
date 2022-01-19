@@ -9,11 +9,11 @@
     <div class="input-outer">
         <div class="input-number">
             <p>Input the starting price of players you want to sell</p>
-            <input type="number" @bind="startPrice" />
+            <input type="number" step="50" @bind="startPrice" />
         </div>
         <div class="input-number">
             <p>Input the BIN price of player you want to sell</p>
-            <input type="number" @bind="binPrice" />
+            <input type="number" step="50" @bind="binPrice" />
         </div>
     </div>
     <div class="button--layer">
@@ -45,10 +45,14 @@
 
         foreach (var player in players)
         {
-            if (RadioValue)
+            if (RadioValue && player.Pending == false && player.Status == "highest")
             {
                 player.Status = await ApiGateway.SellPlayer(player.TradeId, player.ItemData.playerId, token, startPrice, binPrice);
                 this.StateHasChanged();
+                if (player.Status != "Selling")
+                {
+                    break;
+                }
                 await Task.Delay(1000);
             }
 
