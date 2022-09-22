@@ -1,5 +1,6 @@
 ﻿@page "/massbidbyrarity"
 @using FifaTrader.Models;
+@using FifaTrader.Models.SearchOptions
 @using FifaTrader.Pages.Components;
 
 <div class="content-body">
@@ -14,22 +15,28 @@
             <p>Select the league you want to buy from</p>
             <select name="leagueId" @onchange="LeagueSelection">
                 <option value="0">Select a League</option>
-                <option value="16">Ligue 1</option>
+                @foreach (var league in Leagues)
+                {
+                <option value=@league.Value>@league.Key</option>
+                }
             </select>
         </div>
         <div class="input-number">
             <p>Select either rare or common</p>
             <select name="rarityId" @onchange="RaritySelection">
-                <option value="0">Select a rarity</option>
+                <option value="1">Select a rarity</option>
                 <option value="1">Rare</option>
-                <option value="2">Common</option>
+                <option value="0">Common</option>
             </select>
         </div>
         <div class="input-number">
             <p>Select player position</p>
             <select name="positionId" @onchange="PositionSelection">
                 <option value="0">Select a position</option>
-                <option value="CB">CB</option>
+                @foreach(var position in Positions)
+                {
+                    <option value=@position>@position</option>
+                })
             </select>
         </div>
     </div>
@@ -52,6 +59,8 @@
     public string token { get; set; }
     private bool RadioValue { get; set; } = true;
     private bool ExtendPlayerInfo { get; set; } = true;
+    private List<string> Positions = new PlayerPositions().Positions;
+    private Dictionary<string, string> Leagues = new Leagues().LeagueOptions;
 
     public List<BidViewModel> bids = new List<BidViewModel>();
 
