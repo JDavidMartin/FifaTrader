@@ -438,3 +438,7 @@ tr:nth-child(even) {
 .select select:disabled ~ .select_arrow {
     border-top-color: #cccccc;
 }
+
+.increment-options {
+    padding: 1%;
+}

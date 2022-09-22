@@ -11,6 +11,10 @@
             <div class="centre-aligned-inner">
                 <p>Input the price you want to bid</p>
                 <input type="number" step="50" @bind="bidPrice" />
+                <div class="increment-options">
+                    <button class="btn btn-primary" @onclick="e => this.IncrementBidPrice(100)">+100</button>
+                    <button class="btn btn-primary" @onclick="e => this.IncrementBidPrice(1000)">+1000</button>
+                </div>
             </div>
             <div class="centre-aligned-inner">
                 <p>Select either rare or common</p>
@@ -27,13 +31,13 @@
                 </button>
             </div>
             <div class="@(ShowLeagueOptions? "": "collapse")">
-            <select name="leagueId" @onchange="LeagueSelection" class="select">
-                <option value="0">Select a League</option>
+                <select name="leagueId" @onchange="LeagueSelection" class="select">
+                    <option value="0">Select a League</option>
                     @foreach (var league in Leagues)
                     {
                         <option value=@league.Value>@league.Key</option>
                     }
-            </select>
+                </select>
             </div>
         </div>
 
@@ -44,13 +48,29 @@
                 </button>
             </div>
             <div class="@(ShowPositionOptions? "": "collapse" )">
-            <select name="positionId" @onchange="PositionSelection" class="select">
-                <option value="0">Select a position</option>
+                <select name="positionId" @onchange="PositionSelection" class="select">
+                    <option value="0">Select a position</option>
                     @foreach (var position in Positions)
                     {
-                                    <option value=@position>@position</option>
+                        <option value=@position>@position</option>
                     })
-            </select>
+                </select>
+            </div>
+        </div>
+        <div class="select-options">
+            <div>
+                <button @onclick="e => this.ClickOnShowNation()" class="optional-btn @(HasClickedOnShowNationality? "GreyedOut": "")">
+                    OPTIONAL - Select a Nation
+                </button>
+            </div>
+            <div class="@(ShowNationalityOptions? "": "collapse" )">
+                <select name="nationId" @onchange="NationSelection" class="select">
+                    <option value="0">Select a Nation</option>
+                    @foreach (var nation in Nations)
+                    {
+                        <option value=@nation.Value>@nation.Key</option>
+                    })
+                </select>
             </div>
         </div>
     </div>
@@ -67,8 +87,9 @@
 
 @code {
     public int leagueId { get; set; }
-    public int rarityId { get; set; }
+    public int rarityId { get; set; } = 1;
     public string positionSelection { get; set; }
+    public int nationId { get; set; }
     public int bidPrice { get; set; }
     public string token { get; set; }
     private bool RadioValue { get; set; } = true;
@@ -84,13 +105,14 @@
 
     private List<string> Positions = new PlayerPositions().Positions;
     private Dictionary<string, string> Leagues = new Leagues().LeagueOptions;
+    private Dictionary<string, int> Nations = new Nations().NationOptions;
 
     public List<BidViewModel> bids = new List<BidViewModel>();
 
     private async Task BidOnPlayers()
     {
         token = await ProtectedSessionStore.GetAsync<string>("accessToken");
-        bids = await ApiGateway.FetchPlayersByLeague(leagueId, rarityId, bidPrice, token, positionSelection);
+        bids = await ApiGateway.FetchPlayersByLeague(leagueId, rarityId, bidPrice, token, positionSelection, nationId);
 
         for (var i = 0; i < bids.Count; i++)
         {
@@ -139,6 +161,12 @@
         this.StateHasChanged();
     }
 
+    void NationSelection(ChangeEventArgs args)
+    {
+        nationId = int.Parse(args.Value.ToString());
+        this.StateHasChanged();
+    }
+
     void RaritySelection(ChangeEventArgs args)
     {
         rarityId = int.Parse(args.Value.ToString());
@@ -161,5 +189,16 @@
     {
         ShowPositionOptions = !ShowPositionOptions;
         HasClickedOnShowPositions = true;
+    }
+
+    void ClickOnShowNation()
+    {
+        ShowNationalityOptions = !ShowNationalityOptions;
+        HasClickedOnShowNationality = true;
+    }
+
+    void IncrementBidPrice(int increase)
+    {
+        bidPrice += increase;
     }
 }
