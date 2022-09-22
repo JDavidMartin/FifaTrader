@@ -58,12 +58,14 @@ namespace FifaTrader.APIHandler
                 }
             };
 
-            return searchList.Count == 0 ? defaultValue: searchList;
+            return searchList.Count == 0 ? defaultValue : searchList;
         }
 
-        public async Task<List<BidViewModel>> FetchPlayersByLeague(int leagueId, int rarityId, int bidPrice, string accessToken)
+        public async Task<List<BidViewModel>> FetchPlayersByLeague(int leagueId, int rarityId, int bidPrice,
+            string accessToken, string positionId)
         {
-            var searchList = await _getRequestHandler.SearchForLeagueRarityPlayers(leagueId, rarityId, bidPrice, accessToken);
+            var searchList = await _getRequestHandler.SearchForLeagueRarityPlayers(leagueId, rarityId, bidPrice, accessToken,
+                positionId);
             var defaultValue = new List<BidViewModel> {
                 new BidViewModel
                 {
@@ -78,27 +80,30 @@ namespace FifaTrader.APIHandler
             return searchList.Count == 0 ? defaultValue : searchList;
         }
 
-        public async Task<List<BidViewModel>> GetTransferTargets(string accessToken)
+        public async Task<auctionSearchModel> GetTransferTargets(string accessToken)
         {
             try
             {
                 var targetsList = await _getRequestHandler.GetTransferTargets(accessToken);
-                if (targetsList.Count == 0)
+                if (targetsList.AuctionInfo?.Count == 0 || targetsList.AuctionInfo == null)
                 {
                     throw new Exception();
                 }
 
-                var players = _modelBuilder.PopulateDefaultFieldsOfBidViews(targetsList);
-                return players;
+                targetsList.AuctionInfo = _modelBuilder.PopulateDefaultFieldsOfBidViews(targetsList.AuctionInfo);
+                return targetsList;
             }
             catch (Exception)
             {
-                return new List<BidViewModel>
+                return new auctionSearchModel
                 {
-                    new BidViewModel
+                    AuctionInfo = new List<BidViewModel>
                     {
-                        Status = "Expired",
-                        Pending = false,
+                        new BidViewModel
+                        {
+                            Status= "expired",
+                            Pending = false
+                        }
                     }
                 };
             }

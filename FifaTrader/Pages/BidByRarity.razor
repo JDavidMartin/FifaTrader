@@ -25,6 +25,13 @@
                 <option value="2">Common</option>
             </select>
         </div>
+        <div class="input-number">
+            <p>Select player position</p>
+            <select name="positionId" @onchange="PositionSelection">
+                <option value="0">Select a position</option>
+                <option value="CB">CB</option>
+            </select>
+        </div>
     </div>
 
     <button class="btn btn-primary" @onclick="BidOnPlayers">Bid</button>
@@ -40,6 +47,7 @@
 @code {
     public int leagueId { get; set; }
     public int rarityId { get; set; }
+    public string positionSelection { get; set; }
     public int bidPrice { get; set; }
     public string token { get; set; }
     private bool RadioValue { get; set; } = true;
@@ -50,7 +58,7 @@
     private async Task BidOnPlayers()
     {
         token = await ProtectedSessionStore.GetAsync<string>("accessToken");
-        bids = await ApiGateway.FetchPlayersByLeague(leagueId, rarityId, bidPrice, token);
+        bids = await ApiGateway.FetchPlayersByLeague(leagueId, rarityId, bidPrice, token, positionSelection);
 
         for (var i = 0; i < bids.Count; i++)
         {
@@ -107,6 +115,12 @@
     void RaritySelection(ChangeEventArgs args)
     {
         rarityId = int.Parse(args.Value.ToString());
+        this.StateHasChanged();
+    }
+
+    void PositionSelection(ChangeEventArgs args)
+    {
+        positionSelection = args.Value.ToString();
         this.StateHasChanged();
     }
 }

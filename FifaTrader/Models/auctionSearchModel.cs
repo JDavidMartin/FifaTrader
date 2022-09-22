@@ -7,5 +7,11 @@ namespace FifaTrader.Models
     {
         [JsonPropertyName("auctionInfo")]
         public List<BidViewModel> AuctionInfo { get; set; }
+
+        [JsonPropertyName("total")]
+        public int Total { get; set; }
+
+        [JsonPropertyName("credits")]
+        public int Credits { get; set; }
     }
 }

@@ -102,58 +102,63 @@ namespace FifaTraderUnitTests.GatewayTests
         {
             //Arrange
             var accessToken = "ABC";
-            var initial = new List<BidViewModel>
+            var initial = new auctionSearchModel
             {
-                new BidViewModel
+                AuctionInfo = new List<BidViewModel>
                 {
-                    Status="Pending",
-                    BidPrice=1300,
-                    Pending=true,
-                    TimeRemaining=123,
-                    TradeId="123"
-                },
-                new BidViewModel
-                {
-                    Status="Pending",
-                    BidPrice=1300,
-                    Pending=true,
-                    TimeRemaining=-1,
-                    TradeId="123"
+                    new BidViewModel
+                    {
+                        Status="Pending",
+                        BidPrice=1300,
+                        Pending=true,
+                        TimeRemaining=123,
+                        TradeId="123"
+                    },
+                    new BidViewModel
+                    {
+                        Status="Pending",
+                        BidPrice=1300,
+                        Pending=true,
+                        TimeRemaining=-1,
+                        TradeId="123"
+                    }
                 }
             };
 
-            var expected = new List<BidViewModel>
+            var expected = new auctionSearchModel
             {
-                new BidViewModel
+                AuctionInfo = new List<BidViewModel>
                 {
-                    Status="Pending",
-                    BidPrice=1300,
-                    Pending=true,
-                    TimeRemaining=123,
-                    TradeId="123"
-                },
-                new BidViewModel
-                {
-                    Status="Pending",
-                    BidPrice=1300,
-                    Pending=false,
-                    TimeRemaining=-1,
-                    TradeId="123"
+                    new BidViewModel
+                    {
+                        Status="Pending",
+                        BidPrice=1300,
+                        Pending=true,
+                        TimeRemaining=123,
+                        TradeId="123"
+                    },
+                    new BidViewModel
+                    {
+                        Status="Pending",
+                        BidPrice=1300,
+                        Pending=false,
+                        TimeRemaining=-1,
+                        TradeId="123"
+                    }
                 }
             };
 
             A.CallTo(() => _getRequestHandler.GetTransferTargets(accessToken))
                 .Returns(initial);
 
-            A.CallTo(() => _modelBuilder.PopulateDefaultFieldsOfBidViews(initial))
-                .Returns(expected);
+            A.CallTo(() => _modelBuilder.PopulateDefaultFieldsOfBidViews(initial.AuctionInfo))
+                .Returns(expected.AuctionInfo);
 
             //Act
             var actual = await _ApiGateway.GetTransferTargets(accessToken);
 
             //Assert
             A.CallTo(() => _getRequestHandler.GetTransferTargets(accessToken)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _modelBuilder.PopulateDefaultFieldsOfBidViews(initial)).MustHaveHappenedOnceExactly();
 
             actual.Should().BeEquivalentTo(expected);
         }
