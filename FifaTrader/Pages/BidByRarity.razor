@@ -6,38 +6,52 @@
 <div class="content-body">
     <h2>Mass Bidder</h2>
     <p>Use this page to mass bid on rare or common players</p>
-    <div class="input-outer">
-        <div class="input-number">
-            <p>Input the price you want to bid</p>
-            <input type="number" step="50" @bind="bidPrice" />
+    <div>
+        <div class="centre-aligned">
+            <div class="centre-aligned-inner">
+                <p>Input the price you want to bid</p>
+                <input type="number" step="50" @bind="bidPrice" />
+            </div>
+            <div class="centre-aligned-inner">
+                <p>Select either rare or common</p>
+                <select name="rarityId" @onchange="RaritySelection" class="select">
+                    <option value="1">Rare</option>
+                    <option value="0">Common</option>
+                </select>
+            </div>
         </div>
-        <div class="input-number">
-            <p>Select the league you want to buy from</p>
-            <select name="leagueId" @onchange="LeagueSelection">
+        <div class="select-options">
+            <div class="">
+                <button @onclick="e => this.ClickOnShowLeague()" class="optional-btn @(HasClickedOnShowLeague? "GreyedOut": "")">
+                    OPTIONAL - Select a league
+                </button>
+            </div>
+            <div class="@(ShowLeagueOptions? "": "collapse")">
+            <select name="leagueId" @onchange="LeagueSelection" class="select">
                 <option value="0">Select a League</option>
-                @foreach (var league in Leagues)
-                {
-                <option value=@league.Value>@league.Key</option>
-                }
+                    @foreach (var league in Leagues)
+                    {
+                        <option value=@league.Value>@league.Key</option>
+                    }
             </select>
+            </div>
         </div>
-        <div class="input-number">
-            <p>Select either rare or common</p>
-            <select name="rarityId" @onchange="RaritySelection">
-                <option value="1">Select a rarity</option>
-                <option value="1">Rare</option>
-                <option value="0">Common</option>
-            </select>
-        </div>
-        <div class="input-number">
-            <p>Select player position</p>
-            <select name="positionId" @onchange="PositionSelection">
+
+        <div class="select-options">
+            <div>
+                <button @onclick="e => this.ClickOnShowPosition()" class="optional-btn @(HasClickedOnShowPositions? "GreyedOut": "")">
+                    OPTIONAL - Select a Position
+                </button>
+            </div>
+            <div class="@(ShowPositionOptions? "": "collapse" )">
+            <select name="positionId" @onchange="PositionSelection" class="select">
                 <option value="0">Select a position</option>
-                @foreach(var position in Positions)
-                {
-                    <option value=@position>@position</option>
-                })
+                    @foreach (var position in Positions)
+                    {
+                                    <option value=@position>@position</option>
+                    })
             </select>
+            </div>
         </div>
     </div>
 
@@ -58,7 +72,16 @@
     public int bidPrice { get; set; }
     public string token { get; set; }
     private bool RadioValue { get; set; } = true;
-    private bool ExtendPlayerInfo { get; set; } = true;
+
+    private bool ShowLeagueOptions { get; set; } = false;
+    private bool HasClickedOnShowLeague { get; set; } = false;
+
+    private bool ShowPositionOptions { get; set; } = false;
+    private bool HasClickedOnShowPositions { get; set; } = false;
+
+    private bool ShowNationalityOptions { get; set; } = false;
+    private bool HasClickedOnShowNationality { get; set; } = false;
+
     private List<string> Positions = new PlayerPositions().Positions;
     private Dictionary<string, string> Leagues = new Leagues().LeagueOptions;
 
@@ -109,11 +132,6 @@
         this.StateHasChanged();
     }
 
-    void CheckBoxSelection()
-    {
-        ExtendPlayerInfo = !ExtendPlayerInfo;
-        this.StateHasChanged();
-    }
 
     void LeagueSelection(ChangeEventArgs args)
     {
@@ -131,5 +149,17 @@
     {
         positionSelection = args.Value.ToString();
         this.StateHasChanged();
+    }
+
+    void ClickOnShowLeague()
+    {
+        ShowLeagueOptions = !ShowLeagueOptions;
+        HasClickedOnShowLeague = true;
+    }
+
+    void ClickOnShowPosition()
+    {
+        ShowPositionOptions = !ShowPositionOptions;
+        HasClickedOnShowPositions = true;
     }
 }
