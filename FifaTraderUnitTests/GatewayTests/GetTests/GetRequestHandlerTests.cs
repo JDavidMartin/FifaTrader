@@ -110,7 +110,7 @@ namespace FifaTraderUnitTests.GatewayTests.GetTests
             var actual = await _getRequestHandler.GetTransferTargets(accessToken);
 
             //Assert
-            actual.Should().BeEquivalentTo(expectedPlayers);
+            actual.AuctionInfo.Should().BeEquivalentTo(expectedPlayers);
             A.CallTo(() => _getRequestMaker.MakeGetRequest("TargetsUrl", accessToken)).MustHaveHappenedOnceExactly();
         }
 

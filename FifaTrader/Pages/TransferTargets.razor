@@ -9,11 +9,11 @@
     <div class="input-outer">
         <div class="input-number">
             <p>Input the starting price of players you want to sell</p>
-            <input type="number" @bind="startPrice" />
+            <input type="number" step="50" @bind="startPrice" />
         </div>
         <div class="input-number">
             <p>Input the BIN price of player you want to sell</p>
-            <input type="number" @bind="binPrice" />
+            <input type="number" step="50" @bind="binPrice" />
         </div>
     </div>
     <div class="button--layer">
@@ -21,14 +21,14 @@
         <button class="btn btn-primary" @onclick="RefreshPlayers">Refresh Players</button>
         <button class="btn btn-primary" @onclick="ClearExpiredPlayers">Clear Expired Players</button>
     </div>
-    <TargetsCount Bids=@players />
+    <TargetsCount Bids=@players.AuctionInfo CoinCount=@players.Credits TotalTargetsCount="players.Total"/>
     <div>
         <input type="radio" value=true id="Allow" @onchange="RadioSelection" checked=@RadioValue />
         <label for="Allow">Allow API Calls</label>
         <input type="radio" value=false id="Block" @onchange="RadioSelection" checked=@(!RadioValue) />
         <label for="Block">Block API Calls</label>
     </div>
-    <BidView Bids=@players />
+    <BidView Bids=@players.AuctionInfo />
 </div>
 
 @code {
@@ -37,18 +37,25 @@
     public string token { get; set; }
     private bool RadioValue { get; set; } = true;
 
-    public List<BidViewModel> players = new List<BidViewModel>();
+    public auctionSearchModel players = new auctionSearchModel()
+    {
+        AuctionInfo = new List<BidViewModel>()
+    };
 
     private async Task SellPlayers()
     {
         token = await ProtectedSessionStore.GetAsync<string>("accessToken");
 
-        foreach (var player in players)
+        foreach (var player in players.AuctionInfo)
         {
-            if (RadioValue)
+            if (RadioValue && player.Pending == false && player.Status == "highest")
             {
                 player.Status = await ApiGateway.SellPlayer(player.TradeId, player.ItemData.playerId, token, startPrice, binPrice);
                 this.StateHasChanged();
+                if (player.Status != "Selling")
+                {
+                    break;
+                }
                 await Task.Delay(1000);
             }
 
@@ -58,7 +65,7 @@
     private async Task ClearExpiredPlayers()
     {
         var token = await ProtectedSessionStore.GetAsync<string>("accessToken");
-        await ApiGateway.ClearExpiredPlayers(token, players);
+        await ApiGateway.ClearExpiredPlayers(token, players.AuctionInfo);
         await RefreshPlayers();
 
     }
@@ -73,9 +80,9 @@
     {
         var timer = new Timer(new TimerCallback(async _ =>
         {
-            if (players.Count != 0)
+            if (players.AuctionInfo.Count != 0)
             {
-                if (players.Max(x => x.TimeRemaining != -1))
+                if (players.AuctionInfo.Max(x => x.TimeRemaining != -1))
                 {
                     await UpdateTransferTargets();
                     await InvokeAsync(() =>

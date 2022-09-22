@@ -33,7 +33,7 @@ namespace FifaTrader.APIHandler.HttpHandlers.GetRequests
             throw new NotImplementedException();
         }
 
-        public async Task<List<BidViewModel>> GetTransferTargets(string accessToken)
+        public async Task<auctionSearchModel> GetTransferTargets(string accessToken)
         {
             var url = _urlBuilder.GetTransferTargetsUrl();
             try
@@ -41,9 +41,27 @@ namespace FifaTrader.APIHandler.HttpHandlers.GetRequests
                 var response = await _getRequestMaker.MakeGetRequest(url, accessToken);
                 var auctionInfo = JsonConvert.DeserializeObject<auctionSearchModel>(response);
 
-                return auctionInfo.AuctionInfo;
+                return auctionInfo;
             }
             catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new auctionSearchModel();
+            }
+        }
+
+        public async Task<List<BidViewModel>> SearchForLeagueRarityPlayers(int leagueId, int rarityId, int bidPrice, string accessToken, string positionId)
+        {
+            var url = _urlBuilder.BuildSearchForLeagueRarityUrl(leagueId, rarityId, bidPrice, positionId);
+
+            try
+            {
+                var response = await _getRequestMaker.MakeGetRequest(url, accessToken);
+                var auctionInfo = JsonConvert.DeserializeObject<auctionSearchModel>(response);
+
+                return auctionInfo.AuctionInfo;
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return new List<BidViewModel>();

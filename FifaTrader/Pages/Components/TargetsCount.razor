@@ -1,14 +1,30 @@
 ﻿@using FifaTrader.Models
 <div class="targets-count">
     <h3 class="component-title">Targets Summary</h3>
-    <p>Number of items in targets: <b>@Bids.Count</b></p>
+    <p>Number of items in targets: <b>@TotalTargetsCount</b></p>
+    <p>Coin count: <b>@FormatCoins() coins</b></p>
     <p>Number of items won: <b>@Bids.Count(x => x.Status == "highest" && x.Pending == false)</b></p>
-    <p>Number of items not won: <b>@Bids.Count(x => x.Status == "Fail" ||
-                              x.Status == "outbid"|| x.Status == "TooManyRequests"||
-                              x.Status == "ListFull" || x.Status == "Expired")</b></p>
+    <p>
+        Number of items not won: <b>
+            @Bids.Count(x => x.Status == "Fail" ||
+   x.Status == "outbid" || x.Status == "TooManyRequests" ||
+   x.Status == "ListFull" || x.Status == "Expired")
+    </b>
+</p>
 </div>
 
 @code {
     [Parameter]
     public List<BidViewModel> Bids { get; set; }
+
+    [Parameter]
+    public int CoinCount { get; set; }
+
+    [Parameter]
+    public int TotalTargetsCount { get; set; }
+
+    protected string FormatCoins()
+    {
+        return String.Format("{0:n0}", CoinCount);
+    }
 }

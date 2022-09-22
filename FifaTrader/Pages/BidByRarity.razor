@@ -1,26 +1,46 @@
-﻿@page "/massbid"
+﻿@page "/massbidbyrarity"
 @using FifaTrader.Models;
+@using FifaTrader.Models.SearchOptions
 @using FifaTrader.Pages.Components;
 
 <div class="content-body">
     <h2>Mass Bidder</h2>
-    <p>Use this page to mass bid on a player</p>
+    <p>Use this page to mass bid on rare or common players</p>
     <div class="input-outer">
         <div class="input-number">
             <p>Input the price you want to bid</p>
             <input type="number" step="50" @bind="bidPrice" />
         </div>
         <div class="input-number">
-            <p>Input the ID of the player you are bidding on</p>
-            <input type="number" @bind="playerId" />
+            <p>Select the league you want to buy from</p>
+            <select name="leagueId" @onchange="LeagueSelection">
+                <option value="0">Select a League</option>
+                @foreach (var league in Leagues)
+                {
+                <option value=@league.Value>@league.Key</option>
+                }
+            </select>
+        </div>
+        <div class="input-number">
+            <p>Select either rare or common</p>
+            <select name="rarityId" @onchange="RaritySelection">
+                <option value="1">Select a rarity</option>
+                <option value="1">Rare</option>
+                <option value="0">Common</option>
+            </select>
+        </div>
+        <div class="input-number">
+            <p>Select player position</p>
+            <select name="positionId" @onchange="PositionSelection">
+                <option value="0">Select a position</option>
+                @foreach(var position in Positions)
+                {
+                    <option value=@position>@position</option>
+                })
+            </select>
         </div>
     </div>
 
-    <div>
-        <input type="checkbox" value="false" id="Extend" @onchange="CheckBoxSelection" checked="@ExtendPlayerInfo" />
-        <label for="Extend">Show Player Id's?</label>
-        <PlayerIdComponent Extend=@ExtendPlayerInfo ParentOnClickFunction="SetPlayerIdValue" />
-    </div>
     <button class="btn btn-primary" @onclick="BidOnPlayers">Bid</button>
     <div>
         <input type="radio" value=true id="Allow" @onchange="RadioSelection" checked=@RadioValue />
@@ -32,18 +52,22 @@
 </div>
 
 @code {
-    public int playerId { get; set; }
+    public int leagueId { get; set; }
+    public int rarityId { get; set; }
+    public string positionSelection { get; set; }
     public int bidPrice { get; set; }
     public string token { get; set; }
     private bool RadioValue { get; set; } = true;
     private bool ExtendPlayerInfo { get; set; } = true;
+    private List<string> Positions = new PlayerPositions().Positions;
+    private Dictionary<string, string> Leagues = new Leagues().LeagueOptions;
 
     public List<BidViewModel> bids = new List<BidViewModel>();
 
     private async Task BidOnPlayers()
     {
         token = await ProtectedSessionStore.GetAsync<string>("accessToken");
-        bids = await ApiGateway.FetchPlayers(playerId, bidPrice, token);
+        bids = await ApiGateway.FetchPlayersByLeague(leagueId, rarityId, bidPrice, token, positionSelection);
 
         for (var i = 0; i < bids.Count; i++)
         {
@@ -91,8 +115,21 @@
         this.StateHasChanged();
     }
 
-    void SetPlayerIdValue(int selectedPlayerId)
+    void LeagueSelection(ChangeEventArgs args)
     {
-        playerId = selectedPlayerId;
+        leagueId = int.Parse(args.Value.ToString());
+        this.StateHasChanged();
+    }
+
+    void RaritySelection(ChangeEventArgs args)
+    {
+        rarityId = int.Parse(args.Value.ToString());
+        this.StateHasChanged();
+    }
+
+    void PositionSelection(ChangeEventArgs args)
+    {
+        positionSelection = args.Value.ToString();
+        this.StateHasChanged();
     }
 }

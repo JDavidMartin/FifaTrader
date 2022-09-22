@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FifaTrader", "FifaTrader\FifaTrader.csproj", "{545269BD-EAD5-441B-A6EF-99250D0B6C56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FifaTraderUnitTests", "FifaTraderUnitTests\FifaTraderUnitTests.csproj", "{6B301A0B-BCE8-4AB0-9709-E9614EDDAA32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FifaTraderUnitTests", "FifaTraderUnitTests\FifaTraderUnitTests.csproj", "{6B301A0B-BCE8-4AB0-9709-E9614EDDAA32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

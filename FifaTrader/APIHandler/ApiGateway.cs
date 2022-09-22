@@ -47,30 +47,63 @@ namespace FifaTrader.APIHandler
         public async Task<List<BidViewModel>> FetchPlayers(int playerId, int bidPrice, string accessToken)
         {
             var searchList = await _getRequestHandler.SearchForSpecificPlayer(playerId, bidPrice, accessToken);
-            return searchList;
+            var defaultValue = new List<BidViewModel> {
+                new BidViewModel
+                {
+                    Status = "expired",
+                    TimeRemaining = -1,
+                    BidPrice = 0,
+                    Pending = false,
+                    TradeId = "No Players Found"
+                }
+            };
+
+            return searchList.Count == 0 ? defaultValue : searchList;
         }
 
-        public async Task<List<BidViewModel>> GetTransferTargets(string accessToken)
+        public async Task<List<BidViewModel>> FetchPlayersByLeague(int leagueId, int rarityId, int bidPrice,
+            string accessToken, string positionId)
+        {
+            var searchList = await _getRequestHandler.SearchForLeagueRarityPlayers(leagueId, rarityId, bidPrice, accessToken,
+                positionId);
+            var defaultValue = new List<BidViewModel> {
+                new BidViewModel
+                {
+                    Status = "expired",
+                    TimeRemaining = -1,
+                    BidPrice = 0,
+                    Pending = false,
+                    TradeId = "No Players Found"
+                }
+            };
+
+            return searchList.Count == 0 ? defaultValue : searchList;
+        }
+
+        public async Task<auctionSearchModel> GetTransferTargets(string accessToken)
         {
             try
             {
                 var targetsList = await _getRequestHandler.GetTransferTargets(accessToken);
-                if(targetsList.Count == 0)
+                if (targetsList.AuctionInfo?.Count == 0 || targetsList.AuctionInfo == null)
                 {
                     throw new Exception();
                 }
 
-                var players = _modelBuilder.PopulateDefaultFieldsOfBidViews(targetsList);
-                return players;
+                targetsList.AuctionInfo = _modelBuilder.PopulateDefaultFieldsOfBidViews(targetsList.AuctionInfo);
+                return targetsList;
             }
             catch (Exception)
             {
-                return new List<BidViewModel>
+                return new auctionSearchModel
                 {
-                    new BidViewModel
+                    AuctionInfo = new List<BidViewModel>
                     {
-                        Status = "Expired",
-                        Pending = false,
+                        new BidViewModel
+                        {
+                            Status= "expired",
+                            Pending = false
+                        }
                     }
                 };
             }
@@ -79,7 +112,7 @@ namespace FifaTrader.APIHandler
         public async Task<string> SellPlayer(string tradeId, string playerId, string accessToken, int startPrice, int BinPrice)
         {
             var moveCode = await _putRequestHandler.MovePlayerToTradePile(tradeId, playerId, accessToken);
-            if(moveCode == HttpStatusCode.OK)
+            if (moveCode == HttpStatusCode.OK)
             {
                 //Sell player
                 var response = await _postRequestHandler.SellPlayer(playerId, accessToken, startPrice, BinPrice);

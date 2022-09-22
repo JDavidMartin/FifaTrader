@@ -9,5 +9,7 @@
 @using FifaTrader.Shared
 @using Microsoft.AspNetCore.ProtectedBrowserStorage
 @using FifaTrader.APIHandler.Interfaces
+@using FifaTrader.Models.ModelBuilders
 @inject ProtectedSessionStorage ProtectedSessionStore
 @inject IApiGateway ApiGateway
+@inject IPlayerIdModelBuilder _playerIdModelBuilder 

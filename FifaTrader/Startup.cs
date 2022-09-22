@@ -13,6 +13,7 @@ using FifaTrader.APIHandler.HttpHandlers.PutRequests;
 using FifaTrader.APIHandler.HttpHandlers;
 using FifaTrader.APIHandler.HttpHandlers.PostRequests;
 using FifaTrader.APIHandler.HttpHandlers.DeleteRequests;
+using FifaTrader.Models.EnvVariables;
 
 namespace FifaTrader
 {
@@ -47,6 +48,9 @@ namespace FifaTrader
             services.AddTransient<IDeleteHandler, DeleteHandler>();
             services.AddTransient<IDeleteMaker, DeleteMaker>();
             services.AddTransient<ITradeIdsBuilder, TradeIdsBuilder>();
+            services.AddTransient<IPlayerIdModelBuilder, PlayerIdModelBuilder>();
+
+            services.Configure<FifaYear>(Configuration.GetSection(FifaYear.Location));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
