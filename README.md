@@ -11,7 +11,7 @@ When you load the App, you'll be greeted by the home page with a token banner ac
 This is the access token generated when you login to the Fifa Web App.
 
 The easiest way to get this token is to download and install the chrome extension Web Sniffer
-https://chrome.google.com/webstore/detail/web-sniffer/ndfgffclcpdbgghfgkmooklaendohaef?hl=en
+https://chrome.google.com/webstore/detail/live-http-headers/ianhploojoffmpcpilhgpacbeaifanid?hl=en
 When you run this extension, it records all outgoing calls made by your browser, including any headers and parameters of these requests.
 
 With this extension running, go on the Fifa Web App, and go to your Squad page.
@@ -63,4 +63,4 @@ Adding in Transfer List functionality, to manage players currently selling.
 
 Adding in Unassigned functionality, to allow users to move players to unsassigned, and then move to transfer list.
 
-Create a method to store favourited player ID's, to be easily accessed on the Bidding page.
+Create a method to store favourited player ID's, to be easily accessed on the Bidding page. - DONE
