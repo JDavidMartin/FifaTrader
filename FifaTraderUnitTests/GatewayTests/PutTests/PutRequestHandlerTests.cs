@@ -93,7 +93,7 @@ namespace FifaTraderUnitTests.GatewayTests.PutTests
             var actual = await _putRequestHandler.MovePlayerToTradePile(tradeId, playerId, accessToken);
 
             //Assert
-            actual.Should().BeEquivalentTo(HttpStatusCode.OK);
+            actual.Should().Be(HttpStatusCode.OK);
         }
     }
 }
