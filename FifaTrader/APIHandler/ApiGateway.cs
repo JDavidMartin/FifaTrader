@@ -62,10 +62,10 @@ namespace FifaTrader.APIHandler
         }
 
         public async Task<List<BidViewModel>> FetchPlayersByLeague(int leagueId, int rarityId, int bidPrice,
-            string accessToken, string positionId)
+            string accessToken, string positionId, int nationId)
         {
             var searchList = await _getRequestHandler.SearchForLeagueRarityPlayers(leagueId, rarityId, bidPrice, accessToken,
-                positionId);
+                positionId, nationId);
             var defaultValue = new List<BidViewModel> {
                 new BidViewModel
                 {

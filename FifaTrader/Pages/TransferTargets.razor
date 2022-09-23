@@ -10,10 +10,18 @@
         <div class="input-number">
             <p>Input the starting price of players you want to sell</p>
             <input type="number" step="50" @bind="startPrice" />
+            <div class="increment-options">
+                    <button class="btn btn-primary" @onclick="e => this.IncrementStartPrice(100)">+100</button>
+                    <button class="btn btn-primary" @onclick="e => this.IncrementStartPrice(1000)">+1000</button>
+            </div>
         </div>
         <div class="input-number">
             <p>Input the BIN price of player you want to sell</p>
             <input type="number" step="50" @bind="binPrice" />
+            <div class="increment-options">
+                    <button class="btn btn-primary" @onclick="e => this.IncrementBinPrice(100)">+100</button>
+                    <button class="btn btn-primary" @onclick="e => this.IncrementBinPrice(1000)">+1000</button>
+            </div>
         </div>
     </div>
     <div class="button--layer">
@@ -105,5 +113,15 @@
     {
         RadioValue = args.Value.ToString() == "true";
         this.StateHasChanged();
+    }
+
+    void IncrementStartPrice(int increase)
+    {
+        startPrice += increase;
+    }
+
+    void IncrementBinPrice(int increase)
+    {
+        binPrice += increase;
     }
 }

@@ -12,12 +12,14 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
         private string _searchBase;
         private string _bidBase;
         private string _watchListBase;
+        private string _tradePileBase;
         public UrlBuilder(IOptions<FifaYear> fifaYear)
         {
             _fifaYearConfiguration = fifaYear.Value;
             _searchBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/transfermarket?type=player";
             _bidBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/trade/";
             _watchListBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/watchlist";
+            _tradePileBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/tradepile";
         }
 
         public string BuildBidUrl(string tradeId)
@@ -33,7 +35,7 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
             return _watchListBase + query;
         }
 
-        public string BuildSearchForLeagueRarityUrl(int leagueId, int rarityId, int bidPrice, string positionId)
+        public string BuildSearchForLeagueRarityUrl(int leagueId, int rarityId, int bidPrice, string positionId, int nationId)
         {
             string parameterQuery;
             if (bidPrice <= 1000)
@@ -52,6 +54,10 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
             if (!string.IsNullOrEmpty(positionId))
             {
                 parameterQuery += $"&pos={positionId}";
+            }
+            if(nationId != 0)
+            {
+                parameterQuery += $"&nat={nationId}";
             }
 
             return _searchBase + parameterQuery;
