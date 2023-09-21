@@ -10,5 +10,8 @@
         public string GetAuctionUrl();
         public string GetCheckTokenUrl();
         public string BuildDeletePlayerUrl(string tradeIds);
+        public string GetTransferListUrl();
+
+        public string GetUnassignedPileUrl();
     }
 }

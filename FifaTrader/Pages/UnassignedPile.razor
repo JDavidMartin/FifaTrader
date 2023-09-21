@@ -1,4 +1,4 @@
-﻿@page "/Targets"
+﻿@page "/Unassigned"
 @using FifaTrader.Models;
 @using FifaTrader.Pages.Components;
 @using System.Threading;
@@ -106,7 +106,7 @@
     {
         token = await ProtectedSessionStore.GetAsync<string>("accessToken");
 
-        players = await ApiGateway.GetTransferTargets(token);
+        players = await ApiGateway.GetUnassignedPile(token);
     }
 
     void RadioSelection(ChangeEventArgs args)

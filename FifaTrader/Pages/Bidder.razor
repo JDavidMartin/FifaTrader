@@ -9,6 +9,10 @@
         <div class="input-number">
             <p>Input the price you want to bid</p>
             <input type="number" step="50" @bind="bidPrice" />
+            <div class="increment-options">
+                    <button class="btn btn-primary" @onclick="e => this.IncrementBidPrice(100)">+100</button>
+                    <button class="btn btn-primary" @onclick="e => this.IncrementBidPrice(1000)">+1000</button>
+            </div>
         </div>
         <div class="input-number">
             <p>Input the ID of the player you are bidding on</p>
@@ -94,5 +98,10 @@
     void SetPlayerIdValue(int selectedPlayerId)
     {
         playerId = selectedPlayerId;
+    }
+
+    void IncrementBidPrice(int increase)
+    {
+        bidPrice += increase;
     }
 }

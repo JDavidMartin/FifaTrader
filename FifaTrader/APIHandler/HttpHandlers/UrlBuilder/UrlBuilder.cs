@@ -1,6 +1,5 @@
 ﻿using FifaTrader.APIHandler.Interfaces;
 using FifaTrader.Models.EnvVariables;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
@@ -13,6 +12,7 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
         private string _bidBase;
         private string _watchListBase;
         private string _tradePileBase;
+        private string _unassignedBase;
         public UrlBuilder(IOptions<FifaYear> fifaYear)
         {
             _fifaYearConfiguration = fifaYear.Value;
@@ -20,6 +20,7 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
             _bidBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/trade/";
             _watchListBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/watchlist";
             _tradePileBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/tradepile";
+            _unassignedBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/purchased/items";
         }
 
         public string BuildBidUrl(string tradeId)
@@ -92,9 +93,19 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
             return $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/item";
         }
 
+        public string GetTransferListUrl()
+        {
+            return _tradePileBase;
+        }
+
         public string GetTransferTargetsUrl()
         {
             return _watchListBase;
+        }
+
+        public string GetUnassignedPileUrl()
+        {
+            return _unassignedBase;
         }
     }
 }

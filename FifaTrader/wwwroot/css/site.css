@@ -293,7 +293,19 @@ tr:nth-child(even) {
     color: #02611b;
 }
 
+.closed {
+    color: #02611b;
+}
+
+.active {
+    color: #02611b;
+}
+
 .outbid {
+    color: #c41414;
+}
+
+.expired {
     color: #c41414;
 }
 

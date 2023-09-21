@@ -80,11 +80,69 @@ namespace FifaTrader.APIHandler
             return searchList.Count == 0 ? defaultValue : searchList;
         }
 
+        public async Task<auctionSearchModel> GetTransferList(string accessToken)
+        {
+            try
+            {
+                var transferList = await _getRequestHandler.GetTransferList(accessToken);
+                if (transferList.AuctionInfo?.Count == 0 || transferList.AuctionInfo == null)
+                {
+                    throw new Exception();
+                }
+
+                transferList.AuctionInfo = _modelBuilder.PopulateDefaultFieldsOfBidViews(transferList.AuctionInfo);
+                return transferList;
+            }
+            catch (Exception ex)
+            {
+                return new auctionSearchModel
+                {
+                    AuctionInfo = new List<BidViewModel>
+                    {
+                        new BidViewModel
+                        {
+                            Status= "expired",
+                            Pending = false
+                        }
+                    }
+                };
+            }
+        }
+
         public async Task<auctionSearchModel> GetTransferTargets(string accessToken)
         {
             try
             {
                 var targetsList = await _getRequestHandler.GetTransferTargets(accessToken);
+                if (targetsList.AuctionInfo?.Count == 0 || targetsList.AuctionInfo == null)
+                {
+                    throw new Exception();
+                }
+
+                targetsList.AuctionInfo = _modelBuilder.PopulateDefaultFieldsOfBidViews(targetsList.AuctionInfo);
+                return targetsList;
+            }
+            catch (Exception)
+            {
+                return new auctionSearchModel
+                {
+                    AuctionInfo = new List<BidViewModel>
+                    {
+                        new BidViewModel
+                        {
+                            Status= "expired",
+                            Pending = false
+                        }
+                    }
+                };
+            }
+        }
+
+        public async Task<auctionSearchModel> GetUnassignedPile(string accessToken)
+        {
+            try
+            {
+                var targetsList = await _getRequestHandler.GetUnassignedPile(accessToken);
                 if (targetsList.AuctionInfo?.Count == 0 || targetsList.AuctionInfo == null)
                 {
                     throw new Exception();

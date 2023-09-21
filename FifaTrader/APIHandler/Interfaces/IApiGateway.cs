@@ -14,6 +14,10 @@ namespace FifaTrader.APIHandler.Interfaces
 
         Task<auctionSearchModel> GetTransferTargets(string accessToken);
 
+        Task<auctionSearchModel> GetTransferList(string accessToken);
+
+        Task<auctionSearchModel> GetUnassignedPile(string accessToken);
+
         Task<string> SellPlayer(string tradeId, string playerId, string accessToken, int startPrice, int BinPrice);
 
         Task<string> CheckToken(string accessToken);

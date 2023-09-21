@@ -19,6 +19,9 @@ namespace FifaTrader.Models
 
         public bool Pending { get; set; } = true;
 
+        [JsonProperty("tradeState")]
+        public string TradeState { get; set; }
+
         [JsonProperty("itemData")]
         public BidViewItemData ItemData { get; set; }
     }

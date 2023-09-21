@@ -37,6 +37,10 @@ namespace FifaTrader.Models.ModelBuilders
                 {
                     player.Pending = false;
                 }
+                if(player.Status == "none")
+                {
+                    player.Status = player.TradeState;
+                }
             }
 
             return players;
