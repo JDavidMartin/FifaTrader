@@ -16,13 +16,13 @@
         </div>
     </div>
     <div class="button--layer">
-        <button class="btn btn-primary" @onclick="SellPlayers">Sell Non-listed Players</button>
-        <button class="btn btn-primary" @onclick="SellPlayers">Refresh Players</button>
+        @*<button class="btn btn-primary" @onclick="SellPlayers">Sell Non-listed Players</button>*@
+        <button class="btn btn-primary" @onclick="FetchTransferList">Refresh Players</button>
     </div>
 
     <div class="targets-view">
-        <TargetsCount Bids=@bids />
-        <BidView Bids=@bids FullScreen="Partial" />
+        <TargetsCount Bids=@transferList.AuctionInfo CoinCount=@transferList.Credits TotalTargetsCount="transferList.Total" />
+        <BidView Bids=@transferList.AuctionInfo FullScreen="Partial" />
     </div>
 
 </div>
@@ -30,43 +30,18 @@
 @code {
     public int startPrice { get; set; }
     public int binPrice { get; set; }
-    public List<BidViewModel> bids = new List<BidViewModel>();
+    public string token { get; set; }
 
-    private void SellPlayers()
-    {
-        bids = CreateNewBidList();
-    }
-
-    private List<BidViewModel> CreateNewBidList()
-    {
-        var bidList = new List<BidViewModel>();
-        for (var i = 0; i < 22; i++)
+    public auctionSearchModel transferList = new auctionSearchModel
         {
-            if (i % 2 == 0)
-            {
-                bidList.Add(new BidViewModel
-                {
-                    Status = "Outbid",
-                    BidPrice = 1400,
-                    TradeId = "12345",
-                    TimeRemaining = 123,
-                    Pending = false
-                });
-            }
-            else
-            {
-                bidList.Add(new BidViewModel
-                {
-                    Status = "Success",
-                    BidPrice = 1400,
-                    TradeId = "12345",
-                    TimeRemaining = 123,
-                    Pending = true
-                });
-            }
+            AuctionInfo = new List<BidViewModel>()
+        };
 
-        }
+    private async void FetchTransferList()
+    {
+        token = await ProtectedSessionStore.GetAsync<string>("accessToken");
+        transferList = await ApiGateway.GetTransferList(token);
 
-        return bidList;
+        this.StateHasChanged();
     }
 }
