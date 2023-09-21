@@ -1,9 +1,9 @@
 Essentially an interface for interacting with FUT API, specialising in mass buying and selling of a single player at a time.
 
 ## Running The App ##
-Before you can run this App you'll need to download and install at least .Net Core 3.1 sdk
-https://dotnet.microsoft.com/download/dotnet-core/3.1
-Then simply run using your preferred IDE (I developed this using Visual Studio Community 2019).
+Before you can run this App you'll need to download and install at least .Net Core 6 sdk
+https://dotnet.microsoft.com/en-us/download/dotnet/6.0
+Then simply run using your preferred IDE (I developed this using Visual Studio Community 2022).
 https://visualstudio.microsoft.com/vs/
 
 ## Setting Up ##
