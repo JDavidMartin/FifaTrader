@@ -173,6 +173,7 @@ namespace FifaTrader.APIHandler
             if (moveCode == HttpStatusCode.OK)
             {
                 //Sell player
+                await Task.Delay(500);
                 var response = await _postRequestHandler.SellPlayer(playerId, accessToken, startPrice, BinPrice);
 
                 return response;

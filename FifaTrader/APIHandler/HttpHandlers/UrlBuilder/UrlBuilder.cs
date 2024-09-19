@@ -8,6 +8,7 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
     {
         private FifaYear _fifaYearConfiguration;
 
+        private string _baseApiUrl;
         private string _searchBase;
         private string _bidBase;
         private string _watchListBase;
@@ -16,11 +17,12 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
         public UrlBuilder(IOptions<FifaYear> fifaYear)
         {
             _fifaYearConfiguration = fifaYear.Value;
-            _searchBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/transfermarket?type=player";
-            _bidBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/trade/";
-            _watchListBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/watchlist";
-            _tradePileBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/tradepile";
-            _unassignedBase = $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/purchased/items";
+            _baseApiUrl = "https://utas.mob.v4.prd.futc-ext.gcp.ea.com";
+            _searchBase = $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/transfermarket?type=player";
+            _bidBase = $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/trade/";
+            _watchListBase = $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/watchlist";
+            _tradePileBase = $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/tradepile";
+            _unassignedBase = $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/purchased/items";
         }
 
         public string BuildBidUrl(string tradeId)
@@ -80,17 +82,17 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
 
         public string GetAuctionUrl()
         {
-            return $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/auctionhouse";
+            return $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/auctionhouse";
         }
 
         public string GetCheckTokenUrl()
         {
-            return $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/user/credits";
+            return $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/user/credits";
         }
 
         public string GetItemUrl()
         {
-            return $"https://utas.mob.v1.fut.ea.com/ut/game/{_fifaYearConfiguration.Year}/item";
+            return $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/item";
         }
 
         public string GetTransferListUrl()
