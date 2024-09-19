@@ -17,7 +17,7 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
         public UrlBuilder(IOptions<FifaYear> fifaYear)
         {
             _fifaYearConfiguration = fifaYear.Value;
-            _baseApiUrl = "https://utas.mob.v4.prd.futc-ext.gcp.ea.com";
+            _baseApiUrl = "https://utas.mob.v4.prd.futc-ext.gcp.ea.com/ut/game";
             _searchBase = $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/transfermarket?type=player";
             _bidBase = $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/trade/";
             _watchListBase = $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/watchlist";
@@ -87,7 +87,7 @@ namespace FifaTrader.APIHandler.HttpHandlers.UrlBuilder
 
         public string GetCheckTokenUrl()
         {
-            return $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/user/credits";
+            return $"{_baseApiUrl}/{_fifaYearConfiguration.Year}/activeMessage";
         }
 
         public string GetItemUrl()
